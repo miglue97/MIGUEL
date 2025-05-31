@@ -1,0 +1,7 @@
+FROM mongo:6.0
+
+# Directorio donde MongoDB almacenará los datos
+VOLUME /data/db
+
+# Puerto que expone MongoDB
+EXPOSE 27017

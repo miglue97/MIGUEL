@@ -1,0 +1,25 @@
+# Configurar entorno Docker para Minikube
+& minikube -p minikube docker-env | Invoke-Expression
+
+# Construir imágenes Docker para backend y frontend
+docker build -t mern-backend:latest -f Dockerfile-backend .
+docker build -t mern-frontend:latest -f Dockerfile-frontend .
+
+# Aplicar todos los recursos de Kubernetes
+kubectl apply -f mongo-deployment.yaml
+kubectl apply -f mongo-service.yaml
+kubectl apply -f backend-deployment.yaml
+kubectl apply -f backend-service.yaml
+kubectl apply -f frontend-deployment.yaml
+kubectl apply -f frontend-service.yaml
+
+# Verificar que los pods y servicios estén corriendo
+kubectl get pods
+kubectl get services
+kubectl get deployment
+
+# Abrir el servicio del frontend en el navegador
+minikube service frontend-service
+
+
+kubectl logs deployment/backend-deployment
