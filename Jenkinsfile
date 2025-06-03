@@ -8,6 +8,16 @@ pipeline {
     }
 
     stages {
+        stage('Clonar repositorio') {
+            steps {
+                git(
+                    url: 'https://github.com/miglue97/MIGUEL.git',
+                    branch: 'main', // o el nombre real de tu rama
+                    credentialsId: '9f9979de-139a-446e-84f3-4f01f6461625'
+                )
+            }
+        }
+
         stage('Build Imágenes') {
             steps {
                 sh 'docker build -t $BACKEND_IMAGE -f Dockerfile-backend .'
