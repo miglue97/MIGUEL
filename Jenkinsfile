@@ -12,7 +12,7 @@ pipeline {
             steps {
                 git(
                     url: 'https://github.com/miglue97/MIGUEL.git',
-                    branch: 'main', // o el nombre real de tu rama
+                    branch: 'master',
                     credentialsId: '9f9979de-139a-446e-84f3-4f01f6461625'
                 )
             }
@@ -20,22 +20,23 @@ pipeline {
 
         stage('Build Imágenes') {
             steps {
-                sh 'docker build -t $BACKEND_IMAGE -f Dockerfile-backend .'
-                sh 'docker build -t $FRONTEND_IMAGE -f Dockerfile-frontend .'
-                sh 'docker build -t $MONGO_IMAGE -f Dockerfile-mongodb .'
+                bat 'docker build -t %BACKEND_IMAGE% -f Dockerfile-backend .'
+                bat 'docker build -t %FRONTEND_IMAGE% -f Dockerfile-frontend .'
+                bat 'docker build -t %MONGO_IMAGE% -f Dockerfile-mongodb .'
             }
         }
-
+        
         stage('Deploy en Minikube') {
             steps {
-                sh 'kubectl apply -f mongo-deployment.yaml'
-                sh 'kubectl apply -f mongo-service.yaml'
-
-                sh 'kubectl apply -f backend-deployment.yaml'
-                sh 'kubectl apply -f backend-service.yaml'
-
-                sh 'kubectl apply -f frontend-deployment.yaml'
-                sh 'kubectl apply -f frontend-service.yaml'
+                bat '''
+                set KUBECONFIG=C:\\Users\\Migue\\.kube\\config
+                kubectl apply -f mongo-deployment.yaml
+                kubectl apply -f mongo-service.yaml
+                kubectl apply -f backend-deployment.yaml
+                kubectl apply -f backend-service.yaml
+                kubectl apply -f frontend-deployment.yaml
+                kubectl apply -f frontend-service.yaml
+                '''
             }
         }
     }
